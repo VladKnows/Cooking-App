@@ -7,23 +7,22 @@ body {
 
 header {
   background-color: #ff7043;
-  color: white;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  height: 60px;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
+.main-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 2rem;
 }
 
 nav a {
   color: white;
-  margin-left: 1rem;
   text-decoration: none;
   font-weight: bold;
+  font-size: 1rem;
 }
 
 nav a:hover {

@@ -1,19 +1,17 @@
-// Lista hardcodată de categorii pentru început (se va înlocui cu citire din sistemul de fișiere când vei hosta cu un backend)
-const categories = [
-  { id: "paste", name: "Paste" },
-  { id: "orez", name: "Orez" },
-  { id: "supe", name: "Supe" },
-  { id: "deserts", name: "Deserturi" }
-];
-
-const container = document.getElementById("categories");
-
-categories.forEach(category => {
-  const card = document.createElement("div");
-  card.className = "category-card";
-  card.textContent = category.name;
-  card.onclick = () => {
-    window.location.href = `category.html?name=${category.id}`;
-  };
-  container.appendChild(card);
-});
+fetch("data/categories.json")
+  .then(res => res.json())
+  .then(categories => {
+    const container = document.getElementById("categories");
+    categories.forEach(cat => {
+      const div = document.createElement("div");
+      div.className = "category-card";
+      div.textContent = cat.name;
+      div.onclick = () => {
+        window.location.href = `category.html?category=${cat.id}`;
+      };
+      container.appendChild(div);
+    });
+  })
+  .catch(err => {
+    console.error("Eroare la încărcarea categoriilor:", err);
+  });
