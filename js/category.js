@@ -3,31 +3,35 @@ function getCategoryFromURL() {
   return params.get("category");
 }
 
-async function loadCategory() {
+function loadCategory() {
   const category = getCategoryFromURL();
   if (!category) return;
 
-  const indexPath = `data/${category}/index.json`;
   const container = document.getElementById("types");
 
-  try {
-    const files = await fetch(indexPath).then(res => res.json());
+  db.collection("recipes").where("category", "==", category).get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        container.innerHTML = "<p>Nu există rețete în această categorie.</p>";
+        return;
+      }
 
-    for (const file of files) {
-      const recipePath = `data/${category}/${file}.json`;
-      const data = await fetch(recipePath).then(res => res.json());
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const id = doc.id;
 
-      const div = document.createElement("div");
-      div.className = "category-card";
-      div.textContent = data.name;
-      div.onclick = () => {
-        window.location.href = `recipe.html?category=${category}&recipe=${file}`;
-      };
-      container.appendChild(div);
-    }
-  } catch (err) {
-    console.error("Eroare la încărcarea rețetelor:", err);
-  }
+        const div = document.createElement("div");
+        div.className = "category-card";
+        div.textContent = data.name;
+        div.onclick = () => {
+          window.location.href = `recipe.html?category=${category}&recipe=${id}`;
+        };
+        container.appendChild(div);
+      });
+    })
+    .catch(err => {
+      console.error("Eroare la încărcarea rețetelor:", err);
+    });
 }
 
 loadCategory();
